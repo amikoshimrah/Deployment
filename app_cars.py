@@ -5,23 +5,22 @@ import pandas as pd
 import joblib
 
 # Load the regression model pipeline
-model = joblib.load("car_price_regressor.pkl")  # This is actually a regressor
+model = joblib.load("car_price_regressor.pkl")
 
 # Streamlit UI
 st.title("🚗 Car Price Prediction App")
 st.write("Predict the estimated price of a car based on its features.")
 
 # Input fields
-brand = st.selectbox("Brand", ["Toyota", "BMW", "Ford", "Hyundai", "Mercedes", "Honda"])
+brand = st.selectbox("Brand", ["Toyota", "BMW", "Ford", "Hyundai", "Mercedes", "Honda", "Audi", "Volkswagen", "Chevrolet", "Kia", "Mercedes"])
 year = st.number_input("Manufacturing Year", min_value=1990, max_value=2025, value=2020)
 mileage = st.number_input("Mileage (in km)", min_value=0.0, max_value=500000.0, value=50000.0)
 engine_power = st.number_input("Engine Size (L)", min_value=0.5, max_value=10.0, value=2.0)
 transmission = st.selectbox("Transmission Type", ["Manual", "Automatic", "Semi-Automatic"])
-fuel_type = st.selectbox("Fuel Type", ["Petrol", "Diesel", "CNG", "Electric"])
+fuel_type = st.selectbox("Fuel Type", ["Petrol", "Diesel", "CNG", "Electric", "Hybrid"])
 
 # Predict button
 if st.button("Predict Price"):
-    # Construct input as DataFrame with correct column names
     input_data = pd.DataFrame([{
         'Brand': brand,
         'Year': year,
