@@ -5,7 +5,8 @@ import numpy as np
 import joblib
 
 # Load the compressed model
-model = joblib.load("car_price_classifier_compressed.pkl")
+model = joblib.load("car_price_model.pkl")
+
 
 # Streamlit UI
 st.title("🚗 Car Price Prediction App")
