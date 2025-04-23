@@ -2,11 +2,10 @@
 
 import streamlit as st
 import numpy as np
-import pickle
+import joblib  # use joblib instead of pickle
 
-# Load the model
-with open("car_price_classifier_pipeline.pkl", "rb") as file:
-    model = pickle.load(file)
+# Load the compressed model
+model = joblib.load("car_price_classifier_compressed.pkl")
 
 # Streamlit UI
 st.title("🚗 Car Price Prediction App")
