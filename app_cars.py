@@ -5,7 +5,7 @@ import pandas as pd
 import joblib
 
 # Load the regression model pipeline
-model = joblib.load("car_price_classifier_compressed.pkl")  # This is actually a regressor
+model = joblib.load("car_price_regressor_v2.pkl")  # This is actually a regressor
 
 # Streamlit UI
 st.title("🚗 Car Price Prediction App")
