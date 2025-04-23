@@ -5,7 +5,7 @@ import numpy as np
 import joblib
 
 # Load the compressed model
-model = joblib.load("car_price_model.pkl")
+model = joblib.load("car_price_classifier_compressed.pkl")
 
 
 # Streamlit UI
@@ -26,7 +26,8 @@ transmission = st.selectbox("Transmission Type", options=list(transmission_map.k
 fuel_type = st.selectbox("Fuel Type", options=list(fuel_map.keys()))
 
 # Label map for prediction
-label_map = {0: "Low Price", 1: "Medium Price", 2: "High Price"}
+predicted_price = model.predict(input_data)[0]
+st.success(f"💰 Predicted Car Price: **${predicted_price:,.2f}**")
 
 # Predict button
 if st.button("Predict Price Category"):
