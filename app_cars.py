@@ -5,7 +5,7 @@ import pandas as pd
 import joblib
 
 # Load the regression model pipeline
-model = joblib.load("car_price_classifier_compressed.pkl")  # Make sure this is the regressor file
+model = joblib.load("car_price_classifier_compressed.pkl")  # This is actually a regressor
 
 # Streamlit UI
 st.title("🚗 Car Price Prediction App")
@@ -21,7 +21,7 @@ fuel_type = st.selectbox("Fuel Type", ["Petrol", "Diesel", "CNG", "Electric"])
 
 # Predict button
 if st.button("Predict Price"):
-    # Create DataFrame input with column names that match training data
+    # Construct input as DataFrame with correct column names
     input_data = pd.DataFrame([{
         'Brand': brand,
         'Year': year,
@@ -31,6 +31,6 @@ if st.button("Predict Price"):
         'Fuel_Type': fuel_type
     }])
 
-    # Predict the price
+    # Predict the numeric price
     predicted_price = model.predict(input_data)[0]
     st.success(f"💰 Predicted Car Price: **${predicted_price:,.2f}**")
