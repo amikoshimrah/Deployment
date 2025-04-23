@@ -6,8 +6,8 @@ import pandas as pd
 import pickle
 
 # Load Titanic model
-with open('titanic_classification.pkl', 'rb') as f:
-    model = pickle.load(f)
+with open('titanic_classification.pkl', 'rb') as file:
+    model = pickle.load(file)
 
 # Streamlit UI
 st.title("Titanic Survival Prediction App 🚢")
