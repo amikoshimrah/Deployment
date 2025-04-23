@@ -18,8 +18,8 @@ brand = st.selectbox("Brand", [
     "Audi", "Volkswagen", "Chevrolet", "Kia"
 
 ])
-model_name = st.selectbox("Model", ["Rio","Malibu","GLA","Q5","Golf","Camry",
-"Civic","Sportage","RAV4","5 Series","CR-V",""Elantra","Tiguan","Equinox","Explorer",
+model_name = st.selectbox("Model", [
+        "Rio","Malibu","GLA","Q5","Golf","Camry","Civic","Sportage","RAV4","5 Series","CR-V","Elantra","Tiguan","Equinox","Explorer",
 "A3","3 Series","Tucson","Passat","Impala","Corolla","Optima","Fiesta","A4","Focus",
 "E-Class","Sonata","C-Class","X5","Accord"
 ])
