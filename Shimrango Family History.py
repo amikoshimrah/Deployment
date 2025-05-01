@@ -6,13 +6,13 @@ import os
 st.set_page_config(page_title="Shimrango Clan", layout="centered")
 st.title("🤖 Shimrango Clan")
 
-# Load and cache PDF content
+# Load and cache the PDF content
 @st.cache_data
 def load_pdf_text():
     file_path = "Brief History of Shimrang Clan.pdf"
     if not os.path.exists(file_path):
         return "History file not found."
-    
+
     text = ""
     with fitz.open(file_path) as doc:
         for page in doc:
@@ -25,34 +25,42 @@ history_content = load_pdf_text()
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Display past messages
+# Display chat history
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-# Input area with arrow
+# Input field and send button
 with st.container():
     col1, col2 = st.columns([10, 1])
     with col1:
-        user_input = st.text_input("You:", key="user_input", label_visibility="collapsed", placeholder="Ask about Shimrango Clan...")
+        user_input = st.text_input(
+            "You:", key="input_field", label_visibility="collapsed",
+            placeholder="Ask about Shimrango Clan..."
+        )
     with col2:
         send_clicked = st.button("➤", use_container_width=True)
 
-# On message send
+# If user hits enter or clicks ➤
 if (user_input and not send_clicked) or send_clicked:
     if user_input.strip() != "":
+        # Show user message
         st.session_state.messages.append({"role": "user", "content": user_input})
         with st.chat_message("user"):
             st.markdown(user_input)
 
-        # Find relevant lines from PDF
+        # Simple keyword search from the PDF
         keywords = user_input.lower().split()
         matched_lines = []
         for line in history_content.split('\n'):
             if any(word in line.lower() for word in keywords):
                 matched_lines.append(line.strip())
 
-        response = " ".join(matched_lines[:5]) if matched_lines else "Sorry, I couldn't find anything related to that in the history."
+        # Limit response
+        if matched_lines:
+            response = " ".join(matched_lines[:5])  # up to 5 relevant lines
+        else:
+            response = "Sorry, I couldn't find anything related to that in the history."
 
         # Stream response
         with st.chat_message("assistant"):
@@ -64,5 +72,11 @@ if (user_input and not send_clicked) or send_clicked:
                 time.sleep(0.03)
             response_container.markdown(full_response.strip())
 
-        st.session_state.messages.append({"role": "assistant", "content": full_response.strip()})
-        st.session_state.user_input = ""
+        # Save assistant response
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": full_response.strip()
+        })
+
+        # Clear input field
+        st.session_state["input_field"] = ""
