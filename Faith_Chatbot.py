@@ -69,8 +69,10 @@ with col1:
 
     # Clear input after sending
     if st.session_state.get("clear_input"):
-        st.session_state.user_input = ""
+        del st.session_state["user_input"]
         st.session_state.clear_input = False
+        st.experimental_rerun()
+
 
 with col2:
     if st.button("➡️", use_container_width=True):
