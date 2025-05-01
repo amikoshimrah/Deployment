@@ -63,13 +63,17 @@ for msg in st.session_state.messages:
 # ---- Input Field with Arrow or Enter ----
 col1, col2 = st.columns([9, 1])
 
+
 with col1:
-    st.text_input(
+    user_input = st.text_input(
         label="Ask a question or type a verse (e.g., 'John 3:16')",
         key="user_input",
         label_visibility="collapsed",
         on_change=send_message
     )
+    if st.session_state.get("clear_input"):
+        st.session_state.user_input = ""
+        st.session_state.clear_input = False
 
 with col2:
     if st.button("➡️", use_container_width=True):
