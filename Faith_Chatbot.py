@@ -36,8 +36,8 @@ def generate_bot_reply(prompt):
         return f"❌ An error occurred: {str(e)}"
 
 # ---- Send Message Handler ----
-def send_message():
-    user_input = st.session_state.get("user_input", "").strip()
+def send_message(user_input):
+    user_input = user_input.strip()
     if user_input == "":
         return
 
@@ -48,7 +48,7 @@ def send_message():
     response = generate_bot_reply(user_input)
     st.session_state.messages.append({"role": "assistant", "content": response})
 
-    # Use a flag to indicate message was sent
+    # Set a flag to skip the main input temporarily
     st.session_state.message_sent = True
 
 # ---- Display Chat History ----
@@ -56,30 +56,22 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-# ---- Input Field and Send Button ----
+# ---- Input Section ----
 col1, col2 = st.columns([9, 1])
 
 with col1:
-    # Only show input if message wasn't just sent
     if not st.session_state.get("message_sent", False):
-        st.text_input(
+        user_input = st.text_input(
             label="Ask a question or type a verse (e.g., 'John 3:16')",
-            key="user_input",
-            label_visibility="collapsed",
-            on_change=send_message
-        )
-    else:
-        # Show a dummy input to clear the field
-        st.text_input(
-            label="Ask a question or type a verse",
-            value="",
-            key="reset_input",
+            key="main_input",
             label_visibility="collapsed"
         )
-        # Reset the flag
-        st.session_state.message_sent = False
+    else:
+        # Dummy input to avoid rerun issues
+        st.text_input("dummy", value="", label_visibility="collapsed", key="dummy_input")
+        user_input = None
+        st.session_state.message_sent = False  # Reset flag
 
 with col2:
-    if st.button("➡️", use_container_width=True):
-        send_message()
-        st.session_state["user_input"] = ""  # Optional: in case button is used
+    if st.button("➡️", use_container_width=True) and user_input:
+        send_message(user_input)
