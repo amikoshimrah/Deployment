@@ -1,7 +1,7 @@
 import streamlit as st
 
 # ---- Chatbot Config ----
-CHATBOT_NAME = "FaithBot"
+CHATBOT_NAME = "FaithBot -Created by Sothing Shimrah"
 
 # ---- Session Initialization ----
 if "messages" not in st.session_state:
@@ -38,9 +38,24 @@ def send_message():
     st.session_state.user_input = ""
 
 # ---- Placeholder Response Generator ----
+import requests
+
 def generate_bot_reply(prompt):
-    # You can replace this with actual OpenAI API or LLM call
-    return f"**{CHATBOT_NAME}** says: I'm here to help you grow in faith! (You said: _{prompt}_)"
+    verse_ref = prompt.strip()
+    api_url = f"https://bible-api.com/{verse_ref.replace(' ', '%20')}"
+
+    try:
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            data = response.json()
+            text = data.get("text", "").strip()
+            reference = data.get("reference", "")
+            return f"📖 **{reference}**\n\n{text}"
+        else:
+            return "⚠️ Sorry, I couldn't find that verse. Please check your reference (e.g., John 3:16)."
+    except Exception as e:
+        return f"❌ An error occurred: {str(e)}"
+
 
 # ---- Input Field with Enter + Send Arrow ----
 col1, col2 = st.columns([9, 1])
