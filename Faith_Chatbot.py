@@ -37,40 +37,37 @@ def generate_bot_reply(prompt):
 
 # ---- Send Message Handler ----
 def send_message():
-    user_input = st.session_state.user_input.strip()
+    user_input = st.session_state.get("user_input", "").strip()
     if user_input == "":
         return
 
     # Store user message
     st.session_state.messages.append({"role": "user", "content": user_input})
-    with st.chat_message("user"):
-        st.write(user_input)
 
     # Generate and store bot reply
     response = generate_bot_reply(user_input)
     st.session_state.messages.append({"role": "assistant", "content": response})
-    with st.chat_message("assistant"):
-        st.write(response)
 
-    # Clear input field
-    st.session_state.user_input = ""
+    # Clear input on next rerun
+    st.session_state.clear_input = True
 
 # ---- Display Chat History ----
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
-        st.write(msg["content"])
+        st.markdown(msg["content"])  # use markdown for proper formatting
 
-# ---- Input Field with Arrow or Enter ----
+# ---- Input Field and Send Button ----
 col1, col2 = st.columns([9, 1])
 
-
 with col1:
-    user_input = st.text_input(
+    st.text_input(
         label="Ask a question or type a verse (e.g., 'John 3:16')",
         key="user_input",
         label_visibility="collapsed",
         on_change=send_message
     )
+
+    # Clear input after sending
     if st.session_state.get("clear_input"):
         st.session_state.user_input = ""
         st.session_state.clear_input = False
